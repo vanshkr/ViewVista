@@ -1,7 +1,27 @@
 import "./index.css";
-
+import { Routes, Route } from "react-router-dom";
+import SignIn from "./_auth/form/SignIn";
+import SignUp from "./_auth/form/SignUp";
+import { Home } from "./_root/pages/index.js";
+import AuthLayout from "./_auth/AuthLayout";
+import RootLayout from "./_root/RootLayout.jsx";
 function App() {
-  return <h1 className="text-3xl font-bold underline text-pink-800">Hello</h1>;
+  return (
+    <main className="flex h-screen">
+      <Routes>
+        // prvate routes
+        <Route element={<AuthLayout />}>
+          <Route path="/signIn" element={<SignIn />} />
+          <Route path="/signUp" element={<SignUp />} />
+        </Route>
+        // public routes /* index - allows child component to be rendered on the
+        same path as parent */
+        <Route element={<RootLayout />}>
+          <Route index element={<Home />} />
+        </Route>
+      </Routes>
+    </main>
+  );
 }
 
 export default App;
