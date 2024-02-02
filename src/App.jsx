@@ -9,7 +9,7 @@ function App() {
   return (
     <main className="flex h-screen">
       <Routes>
-        // prvate routes
+        // private routes
         <Route element={<AuthLayout />}>
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/signUp" element={<SignUp />} />
