@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Loader } from "@/components/ui/shared/Loader";
 import { Link } from "react-router-dom";
+import { createUserAccount } from "@/lib/appwrite/api";
 
 const SignUp = () => {
   const isLoading = false;
@@ -29,8 +30,10 @@ const SignUp = () => {
       confirmPassword: "",
     },
   });
-  function onSubmit(values) {
-    console.log(values);
+  async function onSubmit(userData) {
+    console.log(userData, "userData");
+    const newUser = await createUserAccount(userData);
+    console.log(newUser);
   }
   return (
     <Form {...form}>

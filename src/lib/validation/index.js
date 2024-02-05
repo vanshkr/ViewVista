@@ -8,14 +8,10 @@ export const signUpFormSchema = z
     email: z.string().email({ message: "Please enter a valid email address." }),
     password: z
       .string()
-      .min(8, { message: "Password must be atleast 8 characters." })
-      .max(15, { message: "Password must be atmost 15 characters." })
-      .refine((data) => {
-        const password = data.password;
-      }),
+      .min(8, { message: "Password must be atleast 8 characters." }),
     confirmPassword: z
       .string()
-      .min(6, { message: "Password must be at least 6 characters" }),
+      .min(8, { message: "Password must be at least 8 characters" }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],
