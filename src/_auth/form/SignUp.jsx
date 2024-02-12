@@ -1,10 +1,10 @@
 import React from "react";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -20,6 +20,7 @@ import { createUserAccount } from "@/lib/appwrite/api";
 
 const SignUp = () => {
   const isLoading = false;
+  const { toast } = useToast();
   const form = useForm({
     resolver: zodResolver(signUpFormSchema),
     defaultValues: {
@@ -31,9 +32,14 @@ const SignUp = () => {
     },
   });
   async function onSubmit(userData) {
-    console.log(userData, "userData");
-    const newUser = await createUserAccount(userData);
-    console.log(newUser);
+    // const newUser = await createUserAccount(userData);
+
+    // toast({
+    //   title: "Scheduled: Catch up",
+    //   description: "Friday, February 10, 2023 at 5:57 PM",
+    // });
+
+    console.log(userData, "NW");
   }
   return (
     <Form {...form}>

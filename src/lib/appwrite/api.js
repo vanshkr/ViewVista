@@ -1,20 +1,45 @@
 import { ID } from "appwrite";
 // import { createContext, useContext, useEffect, useState } from "react";
-import { account } from "./config";
+import { account, appwriteConfig, databases, avatars } from "./config";
 
-export async function createUserAccount({ email, password, name }) {
+export async function createUserAccount({ email, password, name, username }) {
   try {
     const newUserAccount = await account.create(
       ID.unique(),
       email,
       password,
-      name
+      name,
+      username
     );
-    return newUserAccount;
+    if (!newUserAccount) throw new Error("User is not created");
+
+    const avatarURL = avatars.getInitials(name);
+    const response = await saveUserToDB({
+      userId: newUserAccount.$id,
+      name: name,
+      email: email,
+      username: username,
+      imageURL: avatarURL,
+    });
+    console.log(response, "RES");
+    return response;
   } catch (err) {
-    console.log(err);
     return err;
   }
 
   //   await login(email, password);
 }
+
+export const saveUserToDB = async (newUser) => {
+  try {
+    const user = await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollection,
+      ID.unique(),
+      newUser
+    );
+    return user;
+  } catch (error) {
+    return error;
+  }
+};
