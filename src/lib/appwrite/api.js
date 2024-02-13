@@ -1,7 +1,6 @@
-import { ID } from "appwrite";
+import { ID, Query } from "appwrite";
 // import { createContext, useContext, useEffect, useState } from "react";
 import { account, appwriteConfig, databases, avatars } from "./config";
-
 export async function createUserAccount({ email, password, name, username }) {
   try {
     const newUserAccount = await account.create(
@@ -47,8 +46,7 @@ export const saveUserToDB = async (newUser) => {
 export const signInAccount = async ({ email, password }) => {
   try {
     const userSession = await account.createEmailSession(email, password);
-    console.log(userSession);
-    return response;
+    return userSession;
   } catch (err) {
     if (err.response.code === 429) {
       throw new Error(err.response.message);
@@ -61,8 +59,13 @@ export const signInAccount = async ({ email, password }) => {
 export const getAccount = async () => {
   try {
     const currentAccount = await account.get();
-    console.log(currentAccount);
+    const currentUser = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollection,
+      [Query.equal("userId", currentAccount.$id)]
+    );
+    return currentUser;
   } catch (err) {
-    console.log(err);
+    return err;
   }
 };

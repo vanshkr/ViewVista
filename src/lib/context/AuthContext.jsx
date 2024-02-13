@@ -31,18 +31,17 @@ const AuthProvider = ({ children }) => {
     try {
       const currentUser = await getAccount();
       setIsLoading(true);
-      setUser({
-        id: currentUser.$id,
-        name: currentUser.name,
-        username: currentUser.username,
-        email: currentUser.email,
-        imageUrl: currentUser.imageUrl,
-        bio: currentAccount.bio,
-      });
       setIsAuthenticated(true);
+      setUser({
+        id: currentUser?.$id,
+        name: currentUser?.name,
+        username: currentUser?.username,
+        email: currentUser?.email,
+        imageUrl: currentUser?.imageUrl,
+        bio: currentUser?.bio,
+      });
       return true;
     } catch (err) {
-      console.log(err);
       return false;
     } finally {
       setIsLoading(false);
@@ -54,6 +53,7 @@ const AuthProvider = ({ children }) => {
     if (!cookie || cookie.length == 0) {
       navigate("/signIn");
     }
+    checkAuthUser();
   }, []);
 
   const value = {

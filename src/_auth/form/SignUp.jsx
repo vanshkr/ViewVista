@@ -15,15 +15,15 @@ import { signUpFormSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Loader } from "@/components/ui/shared/Loader";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/api";
 import { useAuth } from "@/lib/context/AuthContext";
 
 const SignUp = () => {
   const { checkAuthUser, isLoading: isUserLoading } = useAuth();
-  const { mutationAsync: createUserAccount, isLoading: isCreatingUser } =
+  const { mutateAsync: createUserAccount, isPending: isCreatingUser } =
     useCreateUserAccount();
-  const { mutationAsync: signInAccount, isLoading: isSignIn } =
+  const { mutateAsync: signInAccount, isPending: isSignIn } =
     useSignInAccount();
   const { toast } = useToast();
   const form = useForm({
@@ -36,14 +36,20 @@ const SignUp = () => {
       confirmPassword: "",
     },
   });
+  const navigate = useNavigate();
   async function onSubmit(userData) {
     try {
       await createUserAccount(userData);
       await signInAccount(userData);
       const isLoggedIn = await checkAuthUser();
+      console.log(isLoggedIn);
       if (!isLoggedIn) {
+        console.log("why");
         throw new Error("Authentication failed. Please try again. ");
       }
+      toast({
+        title: "Signed up successfully. ",
+      });
       navigate("/");
     } catch (err) {
       toast({
@@ -161,7 +167,7 @@ const SignUp = () => {
           />
           <div className="flex flex-col gap-y-4">
             <Button className="shad-button_primary " type="submit">
-              {isCreatingUser ? (
+              {isCreatingUser || isSignIn || isUserLoading ? (
                 <div className="flex-center gap-2">
                   <Loader /> Loading...
                 </div>
@@ -175,10 +181,10 @@ const SignUp = () => {
             <p className="text-light-2/80 text-center text-small-regular">
               Already have an account?{" "}
               <Link
-                className="text-bold-semibold text-primary-500 ml-1"
+                className="text-bold-semibold text-primary-500 ml-1 underline"
                 to="/signIn"
               >
-                Log In
+                Sign In
               </Link>
             </p>
           </div>

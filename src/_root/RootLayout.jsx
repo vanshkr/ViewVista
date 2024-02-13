@@ -1,11 +1,15 @@
+import { Topbar, Sidebar } from "../components/ui/shared/index";
 import React from "react";
 import { Outlet } from "react-router-dom";
 
 const RootLayout = () => {
   return (
     <div>
-      RootLayout
-      <Outlet />
+      <Topbar />
+      <Sidebar />
+      <section>
+        <Outlet />
+      </section>
     </div>
   );
 };

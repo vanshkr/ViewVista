@@ -17,3 +17,9 @@ export const signUpFormSchema = z
     path: ["confirmPassword"],
     message: "Passwords does not match",
   });
+export const signInFormSchema = z.object({
+  email: z.string().email({ message: "Please enter a valid email address." }),
+  password: z
+    .string()
+    .min(8, { message: "Password must be atleast 8 characters." }),
+});
