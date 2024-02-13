@@ -16,10 +16,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Loader } from "@/components/ui/shared/Loader";
 import { Link } from "react-router-dom";
-import { createUserAccount } from "@/lib/appwrite/api";
+import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/api";
+import { useAuth } from "@/lib/context/AuthContext";
 
 const SignUp = () => {
-  const isLoading = false;
+  const { checkAuthUser, isLoading: isUserLoading } = useAuth();
+  const { mutationAsync: createUserAccount, isLoading: isCreatingUser } =
+    useCreateUserAccount();
+  const { mutationAsync: signInAccount, isLoading: isSignIn } =
+    useSignInAccount();
   const { toast } = useToast();
   const form = useForm({
     resolver: zodResolver(signUpFormSchema),
@@ -32,14 +37,22 @@ const SignUp = () => {
     },
   });
   async function onSubmit(userData) {
-    // const newUser = await createUserAccount(userData);
-
-    // toast({
-    //   title: "Scheduled: Catch up",
-    //   description: "Friday, February 10, 2023 at 5:57 PM",
-    // });
-
-    console.log(userData, "NW");
+    try {
+      await createUserAccount(userData);
+      await signInAccount(userData);
+      const isLoggedIn = await checkAuthUser();
+      if (!isLoggedIn) {
+        throw new Error("Authentication failed. Please try again. ");
+      }
+      navigate("/");
+    } catch (err) {
+      toast({
+        title: "Something went wrong",
+        description: err.message,
+      });
+    } finally {
+      form.reset();
+    }
   }
   return (
     <Form {...form}>
@@ -148,7 +161,7 @@ const SignUp = () => {
           />
           <div className="flex flex-col gap-y-4">
             <Button className="shad-button_primary " type="submit">
-              {isLoading ? (
+              {isCreatingUser ? (
                 <div className="flex-center gap-2">
                   <Loader /> Loading...
                 </div>

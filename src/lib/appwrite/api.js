@@ -11,7 +11,6 @@ export async function createUserAccount({ email, password, name, username }) {
       name,
       username
     );
-    if (!newUserAccount) throw new Error("User is not created");
 
     const avatarURL = avatars.getInitials(name);
     const response = await saveUserToDB({
@@ -21,13 +20,14 @@ export async function createUserAccount({ email, password, name, username }) {
       username: username,
       imageURL: avatarURL,
     });
-    console.log(response, "RES");
     return response;
   } catch (err) {
-    return err;
+    if (err.response.code === 429) {
+      throw new Error(err.response.message);
+    } else {
+      throw new Error("Sign up failed. Please try again.");
+    }
   }
-
-  //   await login(email, password);
 }
 
 export const saveUserToDB = async (newUser) => {
@@ -41,5 +41,28 @@ export const saveUserToDB = async (newUser) => {
     return user;
   } catch (error) {
     return error;
+  }
+};
+
+export const signInAccount = async ({ email, password }) => {
+  try {
+    const userSession = await account.createEmailSession(email, password);
+    console.log(userSession);
+    return response;
+  } catch (err) {
+    if (err.response.code === 429) {
+      throw new Error(err.response.message);
+    } else {
+      throw new Error("Sign in failed. Please try again.");
+    }
+  }
+};
+
+export const getAccount = async () => {
+  try {
+    const currentAccount = await account.get();
+    console.log(currentAccount);
+  } catch (err) {
+    console.log(err);
   }
 };
