@@ -28,16 +28,16 @@ const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
   const checkAuthUser = async () => {
+    setIsLoading(true);
     try {
       const currentUser = await getAccount();
-      setIsLoading(true);
       setIsAuthenticated(true);
       setUser({
         id: currentUser?.$id,
         name: currentUser?.name,
         username: currentUser?.username,
         email: currentUser?.email,
-        imageUrl: currentUser?.imageUrl,
+        imageUrl: currentUser?.imageURL,
         bio: currentUser?.bio,
       });
       return true;

@@ -14,8 +14,7 @@ function Topbar() {
   }, [isSuccess]);
   console.log(user);
   return (
-    <section>
-      {/*className="topbar"*/}
+    <section className="topbar">
       <div className="flex-between py-4 px-5 items-center">
         <Link to="/" className="flex flex-1">
           <img
@@ -26,14 +25,12 @@ function Topbar() {
           />
         </Link>
         <div className="flex flex-1">
-          <Button>
-            <img
-              variant="ghost"
-              className="shad-button_ghost"
-              src="/assets/icons/logout.svg"
-              alt="logout"
-              onClick={signOutAccount}
-            />
+          <Button
+            variant="ghost"
+            className="shad-button_ghost"
+            onClick={signOutAccount}
+          >
+            <img src="/assets/icons/logout.svg" alt="logout" />
           </Button>
           <Link to={`/profile/${user.id}`}>
             <img

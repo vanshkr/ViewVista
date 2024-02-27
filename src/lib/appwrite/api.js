@@ -64,7 +64,7 @@ export const getAccount = async () => {
       appwriteConfig.userCollection,
       [Query.equal("userId", currentAccount.$id)]
     );
-    return currentUser;
+    return currentUser.documents[0];
   } catch (err) {
     return err;
   }
