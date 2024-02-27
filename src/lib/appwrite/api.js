@@ -69,3 +69,16 @@ export const getAccount = async () => {
     return err;
   }
 };
+
+export const signOutAccount = async () => {
+  try {
+    const userSession = await account.deleteSession("current");
+    return userSession;
+  } catch (err) {
+    if (err.response.code === 429) {
+      throw new Error(err.response.message);
+    } else {
+      throw new Error("Sign out failed.");
+    }
+  }
+};

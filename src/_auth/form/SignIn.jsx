@@ -105,7 +105,7 @@ const SignIn = () => {
           />
           <div className="flex flex-col gap-y-4">
             <Button className="shad-button_primary " type="submit">
-              {isSignIn || isUserLoading ? (
+              {isUserLoading ? (
                 <div className="flex-center gap-2">
                   <Loader /> Loading...
                 </div>

@@ -11,7 +11,7 @@ const DEFAULT_USER = {
   bio: "",
 };
 
-const INTIAL_STATE = {
+const INITIAL_STATE = {
   user: DEFAULT_USER,
   isLoading: false,
   isAuthenticated: false,
