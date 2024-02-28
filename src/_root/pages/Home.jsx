@@ -1,5 +1,7 @@
-import { Button } from "@/components/ui/button";
+import React from "react";
 
-export default function Home() {
-  return <div></div>;
+function Home() {
+  return <div>Home</div>;
 }
+
+export default Home;
